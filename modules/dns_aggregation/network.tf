@@ -1,11 +1,13 @@
 locals {
-  private_subnet_cidr = cidrsubnet(aws_vpc.main.cidr_block, 1, 0)
-  transit_subnet_cidr = cidrsubnet(aws_vpc.main.cidr_block, 1, 1)
+  private_subnet_cidr = cidrsubnet(aws_vpc.main.cidr_block, 1, 1)
+  transit_subnet_cidr = cidrsubnet(aws_vpc.main.cidr_block, 1, 0)
 }
 
 # -- VPC
 resource "aws_vpc" "main" {
-  ipv4_ipam_pool_id = var.ipam_pool_id
+  ipv4_ipam_pool_id    = var.ipam_pool_id
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 
   tags = {
     Name = "${var.system_id}-dns-vpc"
