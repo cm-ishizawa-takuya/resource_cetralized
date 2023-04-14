@@ -1,0 +1,12 @@
+variable "system_id" {}
+variable "workload_index" {}
+variable "region_name" {}
+variable "availability_zone" {}
+variable "ipam_pool_id" {}
+variable "toplevel_pool_cidr" {}
+variable "transit_gateway_id" {}
+variable "instance_profile_name" {}
+variable "route53_zone_id" {}
+variable "parent_domain_name" {}
+variable "primary_dns_ip_address" {}
+variable "secondary_dns_ip_address" {}
