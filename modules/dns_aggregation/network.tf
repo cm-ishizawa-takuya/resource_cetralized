@@ -40,6 +40,10 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "transit" {
   vpc_id             = aws_vpc.main.id
   subnet_ids         = [aws_subnet.transit.id]
   transit_gateway_id = var.transit_gateway_id
+
+  tags = {
+    Name = "${var.system_id}-dns-tgw-attchment"
+  }
 }
 
 # -- Route Table
