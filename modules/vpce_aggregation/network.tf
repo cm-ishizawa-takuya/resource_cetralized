@@ -10,7 +10,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "${local.prefix}-vpc"
+    Name = "${var.system_id}-vpce-vpc"
   }
 }
 
@@ -21,7 +21,7 @@ resource "aws_subnet" "private" {
   availability_zone = var.availability_zone
 
   tags = {
-    Name = "${local.prefix}-subnet-private"
+    Name = "${var.system_id}-vpce-subnet-private"
   }
 }
 
@@ -31,7 +31,7 @@ resource "aws_subnet" "transit" {
   availability_zone = var.availability_zone
 
   tags = {
-    Name = "${local.prefix}-subnet-transit"
+    Name = "${var.system_id}-vpce-subnet-transit"
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "transit" {
   transit_gateway_id = var.transit_gateway_id
 
   tags = {
-    Name = "${local.prefix}-tgw-attachment"
+    Name = "${var.system_id}-vpce-tgw-attchment"
   }
 }
 
@@ -56,7 +56,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "${local.prefix}-rtb-private"
+    Name = "${var.system_id}-vpce-rtb-private"
   }
 
   depends_on = [
@@ -73,29 +73,11 @@ resource "aws_route_table" "transit" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${local.prefix}-rtb-transit"
+    Name = "${var.system_id}-vpce-rtb-transit"
   }
 }
 
 resource "aws_route_table_association" "transit" {
   subnet_id      = aws_subnet.transit.id
   route_table_id = aws_route_table.transit.id
-}
-
-# -- DHCP Option
-resource "aws_vpc_dhcp_options" "main" {
-  domain_name = "${var.region_name}.compute.internal"
-  domain_name_servers = [
-    var.primary_dns_ip_address,
-    var.secondary_dns_ip_address,
-  ]
-
-  tags = {
-    Name = "${local.prefix}-dhcp-options"
-  }
-}
-
-resource "aws_vpc_dhcp_options_association" "main" {
-  vpc_id          = aws_vpc.main.id
-  dhcp_options_id = aws_vpc_dhcp_options.main.id
 }

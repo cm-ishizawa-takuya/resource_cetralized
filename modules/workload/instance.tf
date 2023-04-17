@@ -11,7 +11,7 @@ data "aws_ami" "latest_amazon_linux_2023" {
 resource "aws_instance" "test_instance" {
   ami                    = data.aws_ami.latest_amazon_linux_2023.id
   instance_type          = "t3.micro"
-  subnet_id              = aws_subnet.public.id
+  subnet_id              = aws_subnet.private.id
   iam_instance_profile   = var.instance_profile_name
   vpc_security_group_ids = [aws_security_group.allow_icmp.id]
 

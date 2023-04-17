@@ -30,13 +30,29 @@ module "dns" {
   domain_name        = var.domain_name
 }
 
+module "vpc_endpoint" {
+  source             = "./modules/vpce_aggregation"
+  system_id          = var.system_id
+  region_name        = local.region_name
+  availability_zone  = local.availability_zone
+  ipam_pool_id       = module.ipam.infrastructure_pool_id
+  toplevel_pool_cidr = module.ipam.toplevel_pool_cidr
+  transit_gateway_id = module.transit_gateway.transit_gateway_id
+  dns_vpc_id         = module.dns.vpc_id
+  service_codes = [
+    "ssm",
+    "ssmmessages",
+    "ec2messages",
+  ]
+}
+
 module "common_iam" {
   source    = "./modules/common_iam"
   system_id = var.system_id
 }
 
 module "workloads" {
-  count = 2
+  count = 1
 
   source                   = "./modules/workload"
   system_id                = var.system_id
