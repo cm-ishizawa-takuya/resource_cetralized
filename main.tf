@@ -52,7 +52,7 @@ module "common_iam" {
 }
 
 module "workloads" {
-  count = 1
+  count = 2
 
   source                   = "./modules/workload"
   system_id                = var.system_id
